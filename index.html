@@ -157,34 +157,24 @@
                     <main>
                         <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 <h1 id="pex"><a class="header" href="#pex">Pex</a></h1>
-<p>Bazel rules for the Python executable packaging tool <a href="https://github.com/pantsbuild/pex">pex</a>.</p>
+<p>Bazel rules for the Python executable packaging tool <a href="https://docs.pex-tool.org/">pex</a>.</p>
 <h3 id="setup"><a class="header" href="#setup">Setup</a></h3>
-<p>First ensure <code>rules_venv</code> is setup by referring to <a href="../index.html#setup">rules_venv setup</a>.</p>
-<p>Next, the <code>pex</code> rules work mostly off of toolchains which are used to provide the necessary python targets (aka <code>pex</code>)
-for the process wrappers. Users will want to make sure they have a way to get the necessary python dependencies. Tools such as
-<a href="https://github.com/periareon/req-compile">req-compile</a> can provide these.</p>
-<p>With the appropriate dependencies available, a <a href="#py_pex_toolchain">py_pex_toolchain</a> will need to be configured:</p>
-<pre><code class="language-python">load("@rules_venv//pex:defs.bzl", "py_pex_toolchain")
+<pre><code class="language-python">bazel_dep(name = "rules_pex", version = "{version}")
 
-py_pex_toolchain(
-    name = "toolchain_impl",
-    pex = "@pip_deps//:pex",
-    visibility = ["//visibility:public"]
+pex = use_extension("//pex:extensions.bzl", "pex")
+pex.toolchain(
+    name = "pex_toolchains",
 )
 
-toolchain(
-    name = "toolchain",
-    toolchain = ":toolchain_impl",
-    toolchain_type = "@rules_venv//pex:toolchain_type",
-    visibility = ["//visibility:public"]
+use_repo(
+    pex,
+    "pex_toolchains",
 )
-</code></pre>
-<p>This toolchain then needs to be registered in the <code>MODULE.bazel</code> file.</p>
-<pre><code class="language-python">register_toolchains("//tools/python/pex:toolchain")
-</code></pre>
-<h3 id="usage"><a class="header" href="#usage">Usage</a></h3>
-<p>Python executables can be packaged using the following command:</p>
-<pre><code class="language-bash">bazel run @rules_venv//pex
+
+register_toolchains(
+    "@pex_toolchains//:all",
+    dev_dependency = True,
+)
 </code></pre>
 <h2 id="rules"><a class="header" href="#rules">Rules</a></h2>
 <ul>
