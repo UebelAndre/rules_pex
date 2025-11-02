@@ -156,38 +156,15 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="rules_venv"><a class="header" href="#rules_venv">rules_venv</a></h1>
-<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
-<p>This repository implements Bazel rules for Python and is designed to be a drop-in replacement for the existing
-<a href="https://github.com/bazelbuild/rules_python">rules_python</a> where uses of <code>@rules_python//python:defs.bzl</code> can
-be replaced with <code>@rules_venv//python:defs.bzl</code>.</p>
-<h3 id="improvements-over-rules_python"><a class="header" href="#improvements-over-rules_python">Improvements over <code>rules_python</code></a></h3>
-<p>While <code>rules_python</code> has fantastic toolchain infrastructure which this repo relies on, <code>rules_python</code> ultimately
-suffers from a few issues which this repo aims to solve:</p>
-<ol>
-<li>
-<p>Use of <code>PYTHONPATH</code> to construct the python environment leads to operating system limitations.</p>
-<p>Some details on <code>MAX_ARG_STRLEN</code> and <code>ARG_MAX</code> can be found here: <a href="https://unix.stackexchange.com/a/120842">https://unix.stackexchange.com/a/120842</a></p>
-</li>
-<li>
-<p>Slow startup on windows systems that do not support symlinks.</p>
-<p><code>rules_python</code> creates zipapps on systems that do not support runfiles. For large projects, this can lead to
-large (~500MB+) zip files being constantly compressed and uncompressed to run simple actions which is a lot
-more expensive than systems which support runfiles.</p>
-</li>
-</ol>
-<h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
-<pre><code class="language-python">bazel_dep(name = "rules_venv", version = "{version}")
-</code></pre>
-<div style="break-before: page; page-break-before: always;"></div><!-- Generated with Stardoc: http://skydoc.bazel.build -->
+                        <!-- Generated with Stardoc: http://skydoc.bazel.build -->
 <h1 id="pex"><a class="header" href="#pex">Pex</a></h1>
 <p>Bazel rules for the Python executable packaging tool <a href="https://github.com/pantsbuild/pex">pex</a>.</p>
-<h3 id="setup-1"><a class="header" href="#setup-1">Setup</a></h3>
+<h3 id="setup"><a class="header" href="#setup">Setup</a></h3>
 <p>First ensure <code>rules_venv</code> is setup by referring to <a href="../index.html#setup">rules_venv setup</a>.</p>
 <p>Next, the <code>pex</code> rules work mostly off of toolchains which are used to provide the necessary python targets (aka <code>pex</code>)
 for the process wrappers. Users will want to make sure they have a way to get the necessary python dependencies. Tools such as
 <a href="https://github.com/periareon/req-compile">req-compile</a> can provide these.</p>
-<p>With the appropriate dependencies available, a <a href="rules.html#py_pex_toolchain">py_pex_toolchain</a> will need to be configured:</p>
+<p>With the appropriate dependencies available, a <a href="index.html#py_pex_toolchain">py_pex_toolchain</a> will need to be configured:</p>
 <pre><code class="language-python">load("@rules_venv//pex:defs.bzl", "py_pex_toolchain")
 
 py_pex_toolchain(
@@ -212,20 +189,20 @@ toolchain(
 </code></pre>
 <h2 id="rules"><a class="header" href="#rules">Rules</a></h2>
 <ul>
-<li><a href="rules.html#py_pex_binary">py_pex_binary</a></li>
-<li><a href="rules.html#py_pex_toolchain">py_pex_toolchain</a></li>
-<li><a href="rules.html#py_scie_binary">py_scie_binary</a></li>
+<li><a href="index.html#py_pex_binary">py_pex_binary</a></li>
+<li><a href="index.html#py_pex_toolchain">py_pex_toolchain</a></li>
+<li><a href="index.html#py_scie_binary">py_scie_binary</a></li>
 </ul>
 <h2 id="module-extensions"><a class="header" href="#module-extensions">Module Extensions</a></h2>
 <ul>
-<li><a href="rules.html#pex">pex</a></li>
+<li><a href="index.html#pex">pex</a></li>
 </ul>
 <p><a id="py_pex_binary"></a></p>
 <h2 id="py_pex_binary"><a class="header" href="#py_pex_binary">py_pex_binary</a></h2>
 <pre>
 load("@rules_pex//pex:defs.bzl", "py_pex_binary")
 
-py_pex_binary(<a href="rules.html#py_pex_binary-name">name</a>, <a href="rules.html#py_pex_binary-binary">binary</a>)
+py_pex_binary(<a href="index.html#py_pex_binary-name">name</a>, <a href="index.html#py_pex_binary-binary">binary</a>)
 </pre>
 <p>A rule for creating pex executables from Python targets.</p>
 <p><strong>ATTRIBUTES</strong></p>
@@ -239,8 +216,8 @@ py_pex_binary(<a href="rules.html#py_pex_binary-name">name</a>, <a href="rules.h
 <pre>
 load("@rules_pex//pex:defs.bzl", "py_pex_toolchain")
 
-py_pex_toolchain(<a href="rules.html#py_pex_toolchain-name">name</a>, <a href="rules.html#py_pex_toolchain-pex">pex</a>, <a href="rules.html#py_pex_toolchain-platform">platform</a>, <a href="rules.html#py_pex_toolchain-scie_jump">scie_jump</a>, <a href="rules.html#py_pex_toolchain-scie_ptex">scie_ptex</a>, <a href="rules.html#py_pex_toolchain-scie_python_interpreter">scie_python_interpreter</a>,
-                 <a href="rules.html#py_pex_toolchain-scie_python_version">scie_python_version</a>, <a href="rules.html#py_pex_toolchain-scie_science">scie_science</a>)
+py_pex_toolchain(<a href="index.html#py_pex_toolchain-name">name</a>, <a href="index.html#py_pex_toolchain-pex">pex</a>, <a href="index.html#py_pex_toolchain-platform">platform</a>, <a href="index.html#py_pex_toolchain-scie_jump">scie_jump</a>, <a href="index.html#py_pex_toolchain-scie_ptex">scie_ptex</a>, <a href="index.html#py_pex_toolchain-scie_python_interpreter">scie_python_interpreter</a>,
+                 <a href="index.html#py_pex_toolchain-scie_python_version">scie_python_version</a>, <a href="index.html#py_pex_toolchain-scie_science">scie_science</a>)
 </pre>
 <p>A toolchain for the <a href="https://github.com/pantsbuild/pex">pex</a> packaging tool rules.</p>
 <p><strong>ATTRIBUTES</strong></p>
@@ -260,7 +237,7 @@ py_pex_toolchain(<a href="rules.html#py_pex_toolchain-name">name</a>, <a href="r
 <pre>
 load("@rules_pex//pex:defs.bzl", "py_scie_binary")
 
-py_scie_binary(<a href="rules.html#py_scie_binary-name">name</a>, <a href="rules.html#py_scie_binary-binary">binary</a>)
+py_scie_binary(<a href="index.html#py_scie_binary-name">name</a>, <a href="index.html#py_scie_binary-binary">binary</a>)
 </pre>
 <p>A rule for creating pex scie executables from Python targets.</p>
 <p><strong>ATTRIBUTES</strong></p>
@@ -273,8 +250,8 @@ py_scie_binary(<a href="rules.html#py_scie_binary-name">name</a>, <a href="rules
 <h2 id="pex-1"><a class="header" href="#pex-1">pex</a></h2>
 <pre>
 pex = use_extension("@rules_pex//pex:defs.bzl", "pex")
-pex.toolchain(<a href="rules.html#pex.toolchain-name">name</a>, <a href="rules.html#pex.toolchain-pex_version">pex_version</a>, <a href="rules.html#pex.toolchain-python_version">python_version</a>, <a href="rules.html#pex.toolchain-scie_jump_version">scie_jump_version</a>, <a href="rules.html#pex.toolchain-scie_ptex_version">scie_ptex_version</a>,
-              <a href="rules.html#pex.toolchain-scie_science_version">scie_science_version</a>)
+pex.toolchain(<a href="index.html#pex.toolchain-name">name</a>, <a href="index.html#pex.toolchain-pex_version">pex_version</a>, <a href="index.html#pex.toolchain-python_version">python_version</a>, <a href="index.html#pex.toolchain-scie_jump_version">scie_jump_version</a>, <a href="index.html#pex.toolchain-scie_ptex_version">scie_ptex_version</a>,
+              <a href="index.html#pex.toolchain-scie_science_version">scie_science_version</a>)
 </pre>
 <p>Bzlmod extensions for Pex.</p>
 <p><strong>TAG CLASSES</strong></p>
