@@ -249,8 +249,8 @@ py_scie_binary(<a href="#py_scie_binary-name">name</a>, <a href="#py_scie_binary
 <h2 id="pex-1"><a class="header" href="#pex-1">pex</a></h2>
 <pre>
 pex = use_extension("@rules_pex//pex:defs.bzl", "pex")
-pex.toolchain(<a href="#pex.toolchain-name">name</a>, <a href="#pex.toolchain-pex_version">pex_version</a>, <a href="#pex.toolchain-python_version">python_version</a>, <a href="#pex.toolchain-scie_jump_version">scie_jump_version</a>, <a href="#pex.toolchain-scie_ptex_version">scie_ptex_version</a>,
-              <a href="#pex.toolchain-scie_science_version">scie_science_version</a>)
+pex.toolchain(<a href="#pex.toolchain-name">name</a>, <a href="#pex.toolchain-add_fallback_windows_toolchain">add_fallback_windows_toolchain</a>, <a href="#pex.toolchain-pex_version">pex_version</a>, <a href="#pex.toolchain-python_version">python_version</a>, <a href="#pex.toolchain-scie_jump_version">scie_jump_version</a>,
+              <a href="#pex.toolchain-scie_ptex_version">scie_ptex_version</a>, <a href="#pex.toolchain-scie_science_version">scie_science_version</a>)
 </pre>
 <p>Bzlmod extensions for Pex.</p>
 <p><strong>TAG CLASSES</strong></p>
@@ -275,6 +275,7 @@ register_toolchains(
 <p><strong>Attributes</strong></p>
 <div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Type</th><th style="text-align: left">Mandatory</th><th style="text-align: left">Default</th></tr></thead><tbody>
 <tr><td style="text-align: left"><a id="pex.toolchain-name"></a>name</td><td style="text-align: left">The name of the repository hub to create.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels#target-names">Name</a></td><td style="text-align: left">required</td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a id="pex.toolchain-add_fallback_windows_toolchain"></a>add_fallback_windows_toolchain</td><td style="text-align: left">Whether or not to add a toolchain targeting windows that is incompatible with all platforms. This is useful in avoiding toolchain resolution failures for multi-platform repositories. For more details on windows support. See <a href="https://github.com/UebelAndre/rules_pex/issues/1">https://github.com/UebelAndre/rules_pex/issues/1</a></td><td style="text-align: left">Boolean</td><td style="text-align: left">optional</td><td style="text-align: left"><code>True</code></td></tr>
 <tr><td style="text-align: left"><a id="pex.toolchain-pex_version"></a>pex_version</td><td style="text-align: left">The version of pex to download.</td><td style="text-align: left">String</td><td style="text-align: left">optional</td><td style="text-align: left"><code>"2.67.3"</code></td></tr>
 <tr><td style="text-align: left"><a id="pex.toolchain-python_version"></a>python_version</td><td style="text-align: left">The Python version (e.g., '3.11').</td><td style="text-align: left">String</td><td style="text-align: left">optional</td><td style="text-align: left"><code>"3.11"</code></td></tr>
 <tr><td style="text-align: left"><a id="pex.toolchain-scie_jump_version"></a>scie_jump_version</td><td style="text-align: left">The version of scie jump to download.</td><td style="text-align: left">String</td><td style="text-align: left">optional</td><td style="text-align: left"><code>"1.8.0"</code></td></tr>
