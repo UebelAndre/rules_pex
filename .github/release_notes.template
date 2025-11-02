@@ -1,0 +1,8 @@
+# {version}
+
+## Setup
+```python
+bazel_dep(name = "rules_pex", version = "{version}")
+```
+
+Additional documentation can be found at: https://github.com/UebelAndre/rules_pex

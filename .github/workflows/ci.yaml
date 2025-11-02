@@ -1,0 +1,132 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  merge_group:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+env:
+  BAZEL_STARTUP_FLAGS: --bazelrc=${{ github.workspace }}/.github/github.bazelrc
+
+jobs:
+  ci:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+          - os: ubuntu-24.04
+          - os: ubuntu-24.04-arm
+          - os: windows-2022
+    steps:
+      # Checkout the code
+      - uses: actions/checkout@v4
+
+      - uses: bazel-contrib/setup-bazel@0.14.0
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+
+      - name: Setup Bazelrc (Windows)
+        run: |
+          echo "TEMP=$env:RUNNER_TEMP" >> "$env:GITHUB_ENV"
+          echo "TMP=$env:RUNNER_TEMP" >> "$env:GITHUB_ENV"
+          echo "startup --output_user_root=D:/bzl" > ./user.bazelrc
+        if: startswith(runner.os, 'Windows')
+      - name: Setup Bazelrc
+        run: |
+          echo "common --keep_going" >> ./user.bazelrc
+
+      # Build and Test the code
+      - name: Test (Unix)
+        run: bazel ${BAZEL_STARTUP_FLAGS[@]} test //...
+        if: startswith(runner.os, 'Windows') != true
+      - name: Test (Windows)
+        run: bazel $env:BAZEL_STARTUP_FLAGS test //...
+        if: startswith(runner.os, 'Windows')
+
+  ci-examples:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - macos-latest
+          - ubuntu-24.04
+          - ubuntu-24.04-arm
+          # TODO: https://github.com/UebelAndre/rules_pex/issues/1
+          # - windows-2022
+    steps:
+      # Checkout the code
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: bazel-contrib/setup-bazel@0.14.0
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+
+      # TODO: Add this to the system bazelrc
+      - name: Setup Bazelrc (Windows)
+        run: |
+          echo "TEMP=$env:RUNNER_TEMP" >> "$env:GITHUB_ENV"
+          echo "TMP=$env:RUNNER_TEMP" >> "$env:GITHUB_ENV"
+          echo "BAZEL_STARTUP_FLAGS=--output_user_root=D:/bzl $env:BAZEL_STARTUP_FLAGS" >> "$env:GITHUB_ENV"
+        if: startswith(runner.os, 'Windows')
+
+      # Run the examples test suite
+      - name: Test examples
+        run: python3.11 examples/examples_test.py
+
+  ci-format:
+    runs-on: ubuntu-24.04
+    steps:
+      # Checkout the code
+      - uses: actions/checkout@v4
+      - uses: bazel-contrib/setup-bazel@0.14.0
+        with:
+          bazelisk-cache: true
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Setup pip
+        run: |
+          python -m pip install --upgrade pip setuptools
+      - name: Install dependencies
+        run: |
+          python -m pip install 'black==25.9.0' 'pylint==4.0.2' 'isort==7.0.0' 'mypy==1.18.2' --user
+
+      - name: Run mypy
+        run: |
+          python -m mypy pex tests
+      - name: Run pylint
+        run: |
+          PYTHONPATH="$(pwd)" python -m pylint pex tests
+      - name: Run black
+        run: |
+          python -m black --check --diff pex tests examples
+      - name: Run isort
+        run: |
+          python -m isort --check-only pex tests examples
+
+      - name: Buildifier
+        run: |
+          wget "https://github.com/bazelbuild/buildtools/releases/download/v${BUILDIFIER_VERSION}/buildifier-linux-amd64" -O buildifier
+          chmod +x ./buildifier
+          ./buildifier -lint=warn -mode=check -warnings=all -r ${{ github.workspace }}
+          rm ./buildifier
+        env:
+          BUILDIFIER_VERSION: 8.2.0

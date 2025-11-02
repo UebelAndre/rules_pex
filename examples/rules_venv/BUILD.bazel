@@ -1,0 +1,19 @@
+load("@rules_pex//pex:py_pex_binary.bzl", "py_pex_binary")
+load("@rules_pex//pex:py_scie_binary.bzl", "py_scie_binary")
+load("@rules_venv//python:py_binary.bzl", "py_binary")
+
+py_binary(
+    name = "flask_hello_world",
+    srcs = ["flask_hello_world.py"],
+    deps = ["@pip_deps//:flask"],
+)
+
+py_pex_binary(
+    name = "flask_hello_world.pex",
+    binary = ":flask_hello_world",
+)
+
+py_scie_binary(
+    name = "flask_hello_world.scie",
+    binary = ":flask_hello_world",
+)

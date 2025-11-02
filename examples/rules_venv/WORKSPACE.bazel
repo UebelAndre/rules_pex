@@ -1,0 +1,1 @@
+workspace(name = "rules_pex_example_rules_venv")

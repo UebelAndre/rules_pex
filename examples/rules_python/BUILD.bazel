@@ -1,0 +1,24 @@
+load("@rules_pex//pex:py_pex_binary.bzl", "py_pex_binary")
+load("@rules_pex//pex:py_scie_binary.bzl", "py_scie_binary")
+load("@rules_python//python:py_binary.bzl", "py_binary")
+
+py_binary(
+    name = "flask_hello_world",
+    srcs = ["flask_hello_world.py"],
+    deps = select({
+        "//3rdparty:linux_aarch64": ["@pip_deps_linux_aarch64//flask"],
+        "//3rdparty:linux_x86_64": ["@pip_deps_linux_x86_64//flask"],
+        "//3rdparty:macos_aarch64": ["@pip_deps_macos_aarch64//flask"],
+        "//3rdparty:windows_x86_64": ["@pip_deps_windows_x86_64//flask"],
+    }),
+)
+
+py_pex_binary(
+    name = "flask_hello_world.pex",
+    binary = ":flask_hello_world",
+)
+
+py_scie_binary(
+    name = "flask_hello_world.scie",
+    binary = ":flask_hello_world",
+)

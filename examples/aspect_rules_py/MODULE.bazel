@@ -1,0 +1,59 @@
+"""rules_pex_example_aspect_rules_py"""
+
+module(
+    name = "rules_pex_example_aspect_rules_py",
+    version = "0.0.0",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "rules_pex", version = "0.0.0")
+bazel_dep(name = "aspect_rules_py", version = "1.6.6")
+bazel_dep(name = "rules_python", version = "1.5.1")
+
+local_path_override(
+    module_name = "rules_pex",
+    path = "../../",
+)
+
+pex = use_extension("@rules_pex//pex:extensions.bzl", "pex")
+pex.toolchain(
+    name = "pex_toolchains",
+)
+use_repo(pex, "pex_toolchains")
+
+register_toolchains("@pex_toolchains//:all")
+
+###############################################################################
+## Python Dependencies
+
+pip_deps_linux_aarch64 = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip_deps_linux_aarch64.parse(
+    hub_name = "pip_deps_linux_aarch64",
+    python_version = "3.11",
+    requirements_lock = "@@//3rdparty:requirements_linux_aarch64.txt",
+)
+use_repo(pip_deps_linux_aarch64, "pip_deps_linux_aarch64")
+
+pip_deps_linux_x86_64 = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip_deps_linux_x86_64.parse(
+    hub_name = "pip_deps_linux_x86_64",
+    python_version = "3.11",
+    requirements_lock = "@@//3rdparty:requirements_linux_x86_64.txt",
+)
+use_repo(pip_deps_linux_x86_64, "pip_deps_linux_x86_64")
+
+pip_deps_macos_aarch64 = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip_deps_macos_aarch64.parse(
+    hub_name = "pip_deps_macos_aarch64",
+    python_version = "3.11",
+    requirements_lock = "@@//3rdparty:requirements_macos_aarch64.txt",
+)
+use_repo(pip_deps_macos_aarch64, "pip_deps_macos_aarch64")
+
+pip_deps_windows_x86_64 = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip_deps_windows_x86_64.parse(
+    hub_name = "pip_deps_windows_x86_64",
+    python_version = "3.11",
+    requirements_lock = "@@//3rdparty:requirements_windows_x86_64.txt",
+)
+use_repo(pip_deps_windows_x86_64, "pip_deps_windows_x86_64")

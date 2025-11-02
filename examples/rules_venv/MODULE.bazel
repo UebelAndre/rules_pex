@@ -1,0 +1,36 @@
+"""rules_pex_example_rules_venv"""
+
+module(
+    name = "rules_pex_example_rules_venv",
+    version = "0.0.0",
+)
+
+bazel_dep(name = "platforms", version = "1.0.0")
+bazel_dep(name = "rules_pex", version = "0.0.0")
+bazel_dep(name = "rules_req_compile", version = "1.0.0rc35")
+bazel_dep(name = "rules_venv", version = "0.6.0")
+
+local_path_override(
+    module_name = "rules_pex",
+    path = "../../",
+)
+
+pex = use_extension("@rules_pex//pex:extensions.bzl", "pex")
+pex.toolchain(
+    name = "pex_toolchains",
+)
+use_repo(pex, "pex_toolchains")
+
+register_toolchains("@pex_toolchains//:all")
+
+requirements = use_extension("@rules_req_compile//extensions:python.bzl", "requirements")
+requirements.parse(
+    name = "pip_deps",
+    requirements_locks = {
+        "//3rdparty:requirements_linux_aarch64.txt": "@@//3rdparty:linux_aarch64",
+        "//3rdparty:requirements_linux_x86_64.txt": "@@//3rdparty:linux_x86_64",
+        "//3rdparty:requirements_macos_aarch64.txt": "@@//3rdparty:macos_aarch64",
+        "//3rdparty:requirements_windows_x86_64.txt": "@@//3rdparty:windows_x86_64",
+    },
+)
+use_repo(requirements, "pip_deps")

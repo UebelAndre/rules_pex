@@ -1,0 +1,27 @@
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load("//pex/private:pex_toolchain.bzl", "current_py_pex_toolchain")
+
+exports_files([
+    "defs.bzl",
+    "py_pex_toolchain.bzl",
+    "py_pex_binary.bzl",
+    "py_scie_binary.bzl",
+])
+
+toolchain_type(
+    name = "toolchain_type",
+    visibility = ["//visibility:public"],
+)
+
+current_py_pex_toolchain(
+    name = "current_py_pex_toolchain",
+    tags = ["manual"],
+    visibility = ["//visibility:public"],
+)
+
+bzl_library(
+    name = "defs_bzl",
+    srcs = glob(["*.bzl"]),
+    visibility = ["//visibility:public"],
+    deps = ["//pex/private:bzl_lib"],
+)
