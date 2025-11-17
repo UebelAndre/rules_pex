@@ -1,13 +1,17 @@
-"""# Pex
+"""# rules_pex
 
 Bazel rules for the Python executable packaging tool [pex](https://docs.pex-tool.org/).
 
-### Setup
+## Setup
+
+Below is an example of how to quickly setup toolchains which power the Pex rules. For details
+on customizing toolchains, please see the [`pex`](#pex) module extension or
+[`py_pex_toolchain`](#py_pex_toolchain) rule.
 
 ```python
 bazel_dep(name = "rules_pex", version = "{version}")
 
-pex = use_extension("//pex:extensions.bzl", "pex")
+pex = use_extension("@rules_pex//pex:extensions.bzl", "pex")
 pex.toolchain(
     name = "pex_toolchains",
 )
@@ -19,7 +23,6 @@ use_repo(
 
 register_toolchains(
     "@pex_toolchains//:all",
-    dev_dependency = True,
 )
 ```
 """

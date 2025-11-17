@@ -294,7 +294,7 @@ An extension for defining a pex toolchain.
 An example of defining and using a pex toolchain:
 
 ```python
-pex = use_extension("//pex:extensions.bzl", "pex")
+pex = use_extension("@rules_pex//pex:extensions.bzl", "pex")
 pex.toolchain(
     name = "pex_toolchains",
     pex_version = "2.67.3",
@@ -350,11 +350,11 @@ This tag is used to add fallback binaries for Windows platforms when the actual
 pex tools don't support Windows. This prevents toolchain resolution failures in
 multi-platform repositories.
 
-Note: Full Windows support is tracked in https://github.com/UebelAndre/rules_pex/issues/1
+Note: Full Windows support is tracked in <https://github.com/UebelAndre/rules_pex/issues/1>
 
 Example:
 ```python
-pex = use_extension("//pex:extensions.bzl", "pex")
+pex = use_extension("@rules_pex//pex:extensions.bzl", "pex")
 pex.toolchain(
     name = "pex_toolchains",
     python_version = "3.11",
