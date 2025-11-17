@@ -11,7 +11,7 @@ import subprocess
 import tempfile
 from enum import IntEnum
 from pathlib import Path
-from typing import Any, NamedTuple
+from typing import Any, Dict, NamedTuple, Optional, Tuple
 
 from python.runfiles import Runfiles
 
@@ -124,7 +124,7 @@ def integrity(hex_str: str) -> str:
     return f"sha256-{encoded}"
 
 
-def _platform_from_asset_name(asset_name: str) -> PlatformInfo | None:
+def _platform_from_asset_name(asset_name: str) -> Optional[PlatformInfo]:
     """Extract platform identifier from Python Build Standalone asset name.
 
     Examples:
@@ -172,7 +172,7 @@ def _process_version(
     provider: str,
     python_version: str,
     tmp_path: Path,
-) -> dict[str, dict[str, str]] | None:
+) -> Optional[Dict[str, Dict[str, str]]]:
     """Process a single Python version for a provider.
 
     Args:
@@ -201,7 +201,7 @@ def _process_version(
 
     # Process each distribution asset, preferring gnu builds for Linux
     # Track builds with preference: gnueabihf > gnu > gnueabi > musl
-    platform_assets: dict[str, tuple[dict[str, str], LibcPreference]] = {}
+    platform_assets: Dict[str, Tuple[Dict[str, str], LibcPreference]] = {}
 
     assets = distributions.get("assets", [])
     if isinstance(assets, list):
@@ -235,8 +235,8 @@ def _process_version(
 
 
 def _process_asset(
-    asset: dict[str, object], base_url: str
-) -> tuple[str, dict[str, str], LibcPreference] | None:
+    asset: Dict[str, object], base_url: str
+) -> Optional[Tuple[str, Dict[str, str], LibcPreference]]:
     """Process a single distribution asset.
 
     Args:
@@ -288,7 +288,7 @@ def _process_asset(
 
 def download_provider_info(
     science_binary: Path, provider: str, version: str, tmp_dir: Path
-) -> dict[str, Any] | None:
+) -> Optional[Dict[str, Any]]:
     """Download provider information using science download command.
 
     Args:

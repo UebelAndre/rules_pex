@@ -11,7 +11,7 @@ import tempfile
 import venv
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Callable, Optional, Sequence
+from typing import Callable, List, Optional, Sequence, Union
 
 RLocationPath = str
 
@@ -207,7 +207,7 @@ class ExtendedEnvBuilder(venv.EnvBuilder):
 
 def create_venv(
     venv_name: str,
-    venv_dir: Path | str,
+    venv_dir: Union[Path, str],
     pth: Sequence[str],
 ) -> Path:
     """Construct a new Python venv at the requested location.
@@ -258,7 +258,7 @@ def get_install_fn() -> Callable[[Path, Path], None]:
 
 
 def install_files(
-    imports: list[str], runfiles_manifest: Path, output_dir: Path
+    imports: List[str], runfiles_manifest: Path, output_dir: Path
 ) -> None:
     """A helper for installing files in a directory.
 
@@ -310,7 +310,7 @@ def main() -> None:  # pylint: disable=too-many-locals,too-many-statements
     # The new venv is only a couple of files and directories, cleaning
     # it up should be fast so it's written to a temp directory.
     with tempfile.TemporaryDirectory(
-        prefix="bzl-pex-", ignore_cleanup_errors=True
+        prefix="bzl-pex-",
     ) as tmp:
         temp_dir = Path(tmp)
 
