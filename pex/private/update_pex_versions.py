@@ -10,7 +10,7 @@ import re
 import time
 import urllib.request
 from pathlib import Path
-from typing import Any
+from typing import Any, Dict, List, Optional
 from urllib.error import HTTPError
 from urllib.parse import urlparse
 from urllib.request import urlopen
@@ -99,7 +99,7 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def fetch_sha256(sha256_url: str, artifact_name: str) -> str | None:
+def fetch_sha256(sha256_url: str, artifact_name: str) -> Optional[str]:
     """Parse sha256 hash from a .sha256 file for a specific artifact."""
     req = urllib.request.Request(sha256_url, headers=REQUEST_HEADERS)
     logging.debug("Fetching sha256 file: %s", sha256_url)
@@ -138,11 +138,11 @@ def integrity(hex_str: str) -> str:
 
 
 def _process_release_artifacts(
-    release: dict[str, Any],
+    release: Dict[str, Any],
     version: str,
-    platforms: list[str],
+    platforms: List[str],
     artifact_prefix: str,
-) -> dict[str, dict[str, str]]:
+) -> Dict[str, Dict[str, str]]:
     """Process artifacts for a single release."""
     assets_map = {asset["name"]: asset for asset in release["assets"]}
     artifacts = {}
@@ -184,10 +184,10 @@ def _process_release_artifacts(
 
 
 def _process_pex_release_artifacts(
-    release: dict[str, Any],
+    release: Dict[str, Any],
     version: str,
-    platforms: list[str],
-) -> dict[str, dict[str, str]]:
+    platforms: List[str],
+) -> Dict[str, Dict[str, str]]:
     """Process artifacts for a single pex release (platform-specific .pex files)."""
     assets_map = {asset["name"]: asset for asset in release["assets"]}
     artifacts = {}
@@ -246,10 +246,10 @@ def _handle_rate_limit(exc: HTTPError) -> None:
 
 
 def query_releases(
-    platforms: list[str],
+    platforms: List[str],
     repo: str,
     artifact_prefix: str,
-) -> dict[str, dict[str, dict[str, str]]]:
+) -> Dict[str, Dict[str, Dict[str, str]]]:
     """Query GitHub releases and extract scie binaries for each platform."""
     page = 1
     releases_data = {}
@@ -299,8 +299,8 @@ def query_releases(
 
 
 def query_pex_releases(
-    repo: str, platforms: list[str]
-) -> dict[str, dict[str, dict[str, str]]]:
+    repo: str, platforms: List[str]
+) -> Dict[str, Dict[str, Dict[str, str]]]:
     """Query GitHub releases and extract pex platform-specific binaries."""
     page = 1
     releases_data = {}

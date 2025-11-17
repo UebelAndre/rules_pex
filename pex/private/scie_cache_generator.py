@@ -10,7 +10,7 @@ import subprocess
 import tempfile
 from datetime import datetime
 from pathlib import Path
-from typing import NamedTuple
+from typing import Dict, List, NamedTuple, Optional, Tuple, Union
 from urllib.parse import urlparse
 
 # TODO: These values are hard-coded in pex and need to match the current version
@@ -89,7 +89,7 @@ def verify_download(
     target: str,
     output_dir: Path,
     cache_dir: Path,
-    extra_args: list[str] | None = None,
+    extra_args: Optional[List[str]] = None,
 ) -> None:
     """Run science download and verify it succeeds."""
     # Build command with --cache-dir before the download subcommand
@@ -164,8 +164,8 @@ def populate_hash_cache(
     cache_base_dir: Path,
     url: str,
     source_file: Path,
-    digest_json: dict[str, str | int] | None = None,
-    ttl: bool | None = None,
+    digest_json: Optional[Dict[str, Union[str, int]]] = None,
+    ttl: Optional[bool] = None,
 ) -> None:
     """Populate science's hash-based cache directory with a file.
 
@@ -240,7 +240,7 @@ def get_binary_version(binary_path: Path) -> str:
         return result.stdout.strip()
 
 
-def parse_interpreter_filename(interpreter_name: str) -> tuple[str, str, str, str]:
+def parse_interpreter_filename(interpreter_name: str) -> Tuple[str, str, str, str]:
     """Parse Python interpreter archive filename.
 
     Args:
@@ -436,7 +436,7 @@ def cache_sha256sums(
 
 def get_interpreter_info(
     interpreter: Path,
-    expected_version: str | None = None,
+    expected_version: Optional[str] = None,
 ) -> InterpreterInfo:
     """Extract interpreter information and compute hash.
 
@@ -472,7 +472,7 @@ def get_interpreter_info(
     )
 
 
-def _build_distributions_json(interpreter_info: InterpreterInfo) -> dict[str, object]:
+def _build_distributions_json(interpreter_info: InterpreterInfo) -> Dict[str, object]:
     """Build the distributions JSON structure.
 
     Args:
@@ -503,7 +503,7 @@ def _build_distributions_json(interpreter_info: InterpreterInfo) -> dict[str, ob
 def cache_distributions_json(
     cache_base_dir: Path,
     major_minor_version: str,
-    dist_json: dict[str, object],
+    dist_json: Dict[str, object],
 ) -> None:
     """Cache the distributions JSON file.
 
