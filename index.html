@@ -156,12 +156,15 @@
                 <div id="content" class="content">
                     <main>
                         <!-- Generated with Stardoc: http://skydoc.bazel.build -->
-<h1 id="pex"><a class="header" href="#pex">Pex</a></h1>
+<h1 id="rules_pex"><a class="header" href="#rules_pex">rules_pex</a></h1>
 <p>Bazel rules for the Python executable packaging tool <a href="https://docs.pex-tool.org/">pex</a>.</p>
-<h3 id="setup"><a class="header" href="#setup">Setup</a></h3>
+<h2 id="setup"><a class="header" href="#setup">Setup</a></h2>
+<p>Below is an example of how to quickly setup toolchains which power the Pex rules. For details
+on customizing toolchains, please see the <a href="#pex"><code>pex</code></a> module extension or
+<a href="#py_pex_toolchain"><code>py_pex_toolchain</code></a> rule.</p>
 <pre><code class="language-python">bazel_dep(name = "rules_pex", version = "{version}")
 
-pex = use_extension("//pex:extensions.bzl", "pex")
+pex = use_extension("@rules_pex//pex:extensions.bzl", "pex")
 pex.toolchain(
     name = "pex_toolchains",
 )
@@ -173,7 +176,6 @@ use_repo(
 
 register_toolchains(
     "@pex_toolchains//:all",
-    dev_dependency = True,
 )
 </code></pre>
 <h2 id="rules"><a class="header" href="#rules">Rules</a></h2>
@@ -236,7 +238,7 @@ py_scie_binary(<a href="#py_scie_binary-name">name</a>, <a href="#py_scie_binary
 </tbody></table>
 </div>
 <p><a id="pex"></a></p>
-<h2 id="pex-1"><a class="header" href="#pex-1">pex</a></h2>
+<h2 id="pex"><a class="header" href="#pex">pex</a></h2>
 <pre>
 pex = use_extension("@rules_pex//pex:defs.bzl", "pex")
 pex.add_fallback_windows_binaries(<a href="#pex.add_fallback_windows_binaries-toolchain_name">toolchain_name</a>)
@@ -251,9 +253,9 @@ pex.toolchain(<a href="#pex.toolchain-name">name</a>, <a href="#pex.toolchain-pe
 <p>This tag is used to add fallback binaries for Windows platforms when the actual
 pex tools don't support Windows. This prevents toolchain resolution failures in
 multi-platform repositories.</p>
-<p>Note: Full Windows support is tracked in https://github.com/UebelAndre/rules_pex/issues/1</p>
+<p>Note: Full Windows support is tracked in <a href="https://github.com/UebelAndre/rules_pex/issues/1">https://github.com/UebelAndre/rules_pex/issues/1</a></p>
 <p>Example:</p>
-<pre><code class="language-python">pex = use_extension("//pex:extensions.bzl", "pex")
+<pre><code class="language-python">pex = use_extension("@rules_pex//pex:extensions.bzl", "pex")
 pex.toolchain(
     name = "pex_toolchains",
     python_version = "3.11",
@@ -273,7 +275,7 @@ register_toolchains("@pex_toolchains//:all")
 <h3 id="toolchain"><a class="header" href="#toolchain">toolchain</a></h3>
 <p>An extension for defining a pex toolchain.</p>
 <p>An example of defining and using a pex toolchain:</p>
-<pre><code class="language-python">pex = use_extension("//pex:extensions.bzl", "pex")
+<pre><code class="language-python">pex = use_extension("@rules_pex//pex:extensions.bzl", "pex")
 pex.toolchain(
     name = "pex_toolchains",
     pex_version = "2.67.3",
